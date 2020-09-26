@@ -5,7 +5,7 @@ jobs:
       env_build:
         type: string
         default: ""
-      should_build: string
+      should_build:
         type: string
         default: ""        
     steps:
