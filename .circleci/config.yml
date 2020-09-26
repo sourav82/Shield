@@ -3,7 +3,6 @@ jobs:
     executor: azure-cli/azure-docker
     steps:
       - azure-cli/login-with-service-principal
-      - run: echo "<< parameters.should_build >>"
       - run: echo $BUILD_ENV
       - run:
           name: privision environment
