@@ -39,6 +39,6 @@ workflows:
       - login-to-azure:
           context:
             - Shield
-          should_build: "$NEW_ENV"  
-          env_build: "$BUILD_ENV"
+          should_build: $NEW_ENV  
+          env_build: $BUILD_ENV
       
