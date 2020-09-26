@@ -2,6 +2,7 @@ jobs:
   login-to-azure:
     executor: azure-cli/azure-docker
     steps:
+      - checkout
       - azure-cli/login-with-service-principal
       - run: echo $BUILD_ENV
       - run:
