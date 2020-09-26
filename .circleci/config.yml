@@ -12,4 +12,8 @@ version: 2.1
 workflows:
   example-workflow:
     jobs:
+      - build:
+          context:
+            - Shield
       - login-to-azure
+      
