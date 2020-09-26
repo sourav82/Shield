@@ -11,9 +11,9 @@ jobs:
             ls -l
             if $NEW_ENV; then
               if [ "$BUILD_ENV" = "Dev" ]; then
-                az resource list
+                az deployment sub create --subscription $SUBSCRIPTION_ID --location eastus --template-file Infrastructure-Code/ResourceGroup/resourcegroup.json --parameters rgLocation=eastus rgName=DEV-RG environment=Dev project=Shield
               elif [ "$BUILD_ENV" = "SIT" ]; then
-                az resource list
+                az deployment sub create --subscription $SUBSCRIPTION_ID --location eastus --template-file Infrastructure-Code/ResourceGroup/resourcegroup.json --parameters rgLocation=eastus rgName=SIT-RG environment=SIT project=Shield
               fi
             fi
       - run: echo 0               
