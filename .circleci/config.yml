@@ -20,7 +20,15 @@ jobs:
                   - run:
                       command: az resource list
                       name: List resources of tenant stored as `AZURE_SP_TENANT` env var for Dev environment
-
+            - when:
+                condition:
+                  equal: [ SIT, << parameters.env_build >> ]          
+                steps:
+                  - azure-cli/login-with-service-principal
+                  - run:
+                      command: az resource list
+                      name: List resources of tenant stored as `AZURE_SP_TENANT` env var for SIT environment
+       - run: echo 0               
 
 orbs:
   azure-cli: circleci/azure-cli@1.0.0
