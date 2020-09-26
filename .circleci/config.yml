@@ -8,6 +8,7 @@ jobs:
       - run:
           name: privision environment
           command: |
+            ls -l
             if $NEW_ENV; then
               if [ "$BUILD_ENV" = "Dev" ]; then
                 az resource list
