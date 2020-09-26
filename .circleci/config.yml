@@ -2,10 +2,13 @@ jobs:
   login-to-azure:
     executor: azure-cli/azure-docker
     steps:
-      - azure-cli/login-with-service-principal
-      - run:
-          command: az resource list
-          name: List resources of tenant stored as `AZURE_SP_TENANT` env var
+      - when:
+          condition: $BUILD_ENV
+          steps:
+            - azure-cli/login-with-service-principal
+            - run:
+                command: az resource list
+                name: List resources of tenant stored as `AZURE_SP_TENANT` env var
 orbs:
   azure-cli: circleci/azure-cli@1.0.0
 version: 2.1
@@ -15,5 +18,4 @@ workflows:
       - login-to-azure:
           context:
             - Shield
-      - login-to-azure
       
