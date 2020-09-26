@@ -9,10 +9,10 @@ jobs:
         type: string
         default: ""        
     steps:
-      - run: echo << parameters.should_build >>
+      - run: echo "<< parameters.should_build >>"
       - run: echo $BUILD_ENV
       - when:
-          condition: << parameters.should_build >>        
+          condition: "<< parameters.should_build >>"
           steps:
             - when:
                 condition: 
