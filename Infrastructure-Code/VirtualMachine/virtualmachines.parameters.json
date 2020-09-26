@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "adminUsername": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "adminPassword": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "windowsOSVersion": {
+            "value": "2019-Datacenter"
+        },
+        "vmSize": {
+            "value": "Standard_DS1_v2"
+        },
+        "nicName": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "rgLocation": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "artifactsLocation": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "artifactsLocationSasToken": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "vmCount": {
+            "value": 1 // TODO: Fill in parameter value
+        },
+        "environment": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "project": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "application": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "vmPrefix":{
+            "value": ""
+        },
+        "publisher": {
+            "value": ""
+        },
+        "offer": {
+            "value": ""
+        }         
+    }
+}

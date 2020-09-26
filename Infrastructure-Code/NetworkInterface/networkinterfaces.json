@@ -1,0 +1,95 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "rgLocation": {
+           "type": "string",
+           "metadata": {
+                "description": "Location of the nic"
+            }
+        },
+        "environment": {
+           "type": "string",
+           "metadata": {
+                "description": "Environment of deployment"
+            }
+        },
+        "project": {
+           "type": "string",
+           "metadata": {
+                "description": "Project name for this deployment"
+            }
+        },
+        "vmCount": {
+           "type": "int",
+           "metadata": {
+                "description": "Number of interfaces to create"
+            }
+        },
+        "subnetRef": {
+           "type": "string",
+           "metadata": {
+                "description": "Reference to the subnet for this nic"
+            }
+        },
+        "nicName": {
+           "type": "string",
+           "metadata": {
+                "description": "Name of the nic"
+            }
+        },
+        "artifactsLocation": {
+            "type": "string",
+            "metadata": {
+                    "description": "Artifacts location"
+                }
+        },
+        "artifactsLocationSasToken": {
+            "type": "string",
+            "metadata": {
+                    "description": "SAS token for the storage account"
+                }
+        }        
+    },
+    "functions": [],
+    "variables": {
+        "networkInterfaceTemplateUri": "[concat(parameters('artifactsLocation'),'NetworkInterface/networkinterface.json',parameters('artifactsLocationSasToken'))]"
+    },
+    "resources": [
+           {
+                "type": "Microsoft.Resources/deployments",
+                "apiVersion": "2019-10-01",
+                "name": "[concat('networkinterfacedeployment', copyIndex())]",
+                "copy": {
+                    "name": "interfacescopy",
+                    "count": "[parameters('vmCount')]"
+                },     
+                "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('networkInterfaceTemplateUri')]"
+                },
+                "parameters": {
+                        "rgLocation": {
+                            "value": "[parameters('rgLocation')]"
+                        },
+                        "subnetRef": {
+                        //"value": "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'), parameters('vmSubnetName'))]"
+                        //"value": "[concat(subscription().Id, '/resourceGroups/', parameters('rgName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'), '/subnets/', parameters('vmSubnetName'))]"
+                            "value": "[parameters('subnetRef')]"
+                        },
+                        "nicName": {
+                            "value": "[concat(parameters('nicName'), '1', padLeft(add(copyIndex(), 1), 3, '0'), '-nic')]"
+                        },
+                        "environment": {
+                            "value": "[parameters('environment')]"
+                        },
+                        "project": {
+                            "value": "[parameters('project')]"
+                        }
+                    }
+                }
+            }
+    ],
+    "outputs": {}
+}

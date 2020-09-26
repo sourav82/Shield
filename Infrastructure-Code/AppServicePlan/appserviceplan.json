@@ -1,0 +1,124 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appServicePlanSku": {
+           "type": "string",
+           "metadata": {
+                "description": "Sku for app service plan"
+            }
+        },
+        "rgLocation": {
+           "type": "string",
+           "metadata": {
+                "description": "Location of the app service plan"
+            }
+        },
+        "appServicePlanName": {
+           "type": "string",
+           "metadata": {
+                "description": "Name of the app service plan"
+            }
+        },
+        "environment": {
+           "type": "string",
+           "metadata": {
+                "description": "Environment for this deployment"
+            }
+        },
+        "project": {
+           "type": "string",
+           "metadata": {
+                "description": "Project name for this deployment"
+            }
+        },
+        "aspKind": {
+            "type": "string",
+            "defaultValue": "app",
+            "allowedValues": [
+                "app",
+                "elastic",
+                "linux"
+            ],
+            "metadata": {
+                "description": "Kind of app service plan"
+            }
+        },
+        "aspTier": {
+            "type": "string",
+            "allowedValues": [
+                "Standard",
+                "Dynamic",
+                "PremiumV2",
+                "ElasticPremium"
+            ],
+            "metadata": {
+                "description": "Tier of deployment"
+            }
+        },
+        "isReserved": {
+            "type": "bool",
+            "metadata": {
+                "description": "True for function app"
+            }
+        },
+        "workerSize": {
+            "type": "int",
+            "metadata": {
+                "description": "Size of worker"
+            }
+        },
+        "workerSizeId": {
+            "type": "int",
+            "metadata": {
+                "description": "ID of worker size"
+            }
+        },
+        "numberOfWorkers": {
+            "type": "int",
+            "metadata": {
+                "description": "Number of workers"
+            }
+        },
+        "hostingEnvironment": {
+            "type": "string",
+            "metadata": {
+                "description": "Hosting environment"
+            }
+        },
+        "capacity": {
+            "type": "string",
+            "metadata": {
+                "description": "Instance count in manual auto-scale"
+            }
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2018-02-01",
+            "name": "[parameters('appServicePlanName')]",
+            "location": "[parameters('rglocation')]",
+            "tags": {
+                "Environment-Type": "[parameters('environment')]",
+                "project": "[parameters('project')]"
+            },
+            "sku": {
+                "tier": "[parameters('aspTier')]",
+                "name": "[parameters('appServicePlanSku')]",
+                "capacity": "[parameters('capacity')]"
+            },
+            "kind": "[parameters('aspKind')]",
+            "properties": {
+                "workerSize": "[parameters('workerSize')]",
+                "workerSizeId": "[parameters('workerSizeId')]",
+                "numberOfWorkers": "[parameters('numberOfWorkers')]",
+                "hostingEnvironment": "[parameters('hostingEnvironment')]",
+                "reserved": "[parameters('isReserved')]"
+            }
+        }
+    ],
+    "outputs": {}
+}

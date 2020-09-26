@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "rgLocation": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "vmCount": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "subnetRef": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "nicName": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "artifactsLocation": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "artifactsLocationSasToken": {
+            "value": "" // TODO: Fill in parameter value
+        }
+    }
+}

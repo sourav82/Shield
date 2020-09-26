@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "rgLocation": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "environment": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "project": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "keyVauleSkuName": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "keyVaultAccessPolicyObjId": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "sqlPasswordSecretName": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "kvName": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "enableSoftDelete": {
+            "value": false
+        }
+    }
+}

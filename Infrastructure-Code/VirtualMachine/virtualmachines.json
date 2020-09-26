@@ -1,0 +1,162 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "adminUsername": {
+			"type": "string",
+			"metadata": {
+				"description": "Username for the Virtual Machine."
+			}
+		},
+		"adminPassword": {
+			"type": "string",
+			"metadata": {
+				"description": "Password for the Virtual Machine."
+			}
+		},
+		"windowsOSVersion": {
+			"type": "string",
+			"defaultValue": "2019-Datacenter",
+			"metadata": {
+				"description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version."
+			}
+		},
+		"vmSize": {
+			"type": "string",
+			"defaultValue": "Standard_D2_v3",
+			"metadata": {
+				"description": "Size of the virtual machine."
+			}
+		},
+        "nicName": {
+           "type": "string",
+           "metadata": {
+                "description": "Name of the nic"
+            }
+        },
+		"rgLocation": {
+			"type": "string",
+			"metadata": {
+				"description": "Location for all resources."
+			}
+		},
+        "artifactsLocation": {
+           "type": "string",
+           "metadata": {
+                "description": "Location of artifacts"
+            }
+        },
+        "artifactsLocationSasToken": {
+           "type": "string",
+           "metadata": {
+                "description": "SAS token for the storage account container"
+            }
+        },
+        "vmCount": {
+           "type": "int",
+           "metadata": {
+                "description": "Number of virtual machines"
+            }
+        },
+        "environment": {
+           "type": "string",
+           "metadata": {
+                "description": "Environment of the deploymemt"
+            }
+        },
+        "project": {
+           "type": "string",
+           "metadata": {
+                "description": "Project name for the deployment"
+            }
+        },
+        "application": {
+           "type": "string",
+           "metadata": {
+                "description": "Application name for the dpeloyment"
+            }
+        },
+        "vmPrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "Prefix of VM name"
+            }
+        },
+        "publisher": {
+            "type": "string",
+            "metadata": {
+                "description": "Publisher of the VM image"
+            }
+        },
+        "offer": {
+            "type": "string",
+            "metadata": {
+                "description": "VM offering"
+            }
+        }
+
+    },
+    "functions": [],
+    "variables": {
+            "virtualMachineTemplateUri": "[concat(parameters('artifactsLocation'),'VirtualMachine/virtualmachine.json',parameters('artifactsLocationSasToken'))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "[concat('virtualmachinedeployment', copyIndex())]",
+            "copy": {
+                "name": "vmcopy",
+                "count": "[parameters('vmCount')]"
+            },     
+            "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+                "uri": "[variables('virtualMachineTemplateUri')]"
+            },
+            "parameters": {
+                    "environment": {
+                        "value": "[parameters('environment')]"
+                    },
+                    "project": {
+                        "value": "[parameters('project')]"
+                    },
+                    "adminUsername": {
+                    "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                    "value": "[parameters('adminPassword')]"
+                    },
+                    "windowsOSVersion": {
+                    "value": "[parameters('windowsOSVersion')]"
+                    },
+                    "vmSize": {
+                    "value": "[parameters('vmSize')]"
+                    },
+                    "vmName": {
+                    "value": "[concat(parameters('vmPrefix'), '1', padLeft(add(copyIndex(), 1), 3, '0'))]"
+                    },
+                    "nicName": {
+                    "value": "[concat(parameters('nicName'), '1', padLeft(add(copyIndex(), 1), 3, '0'), '-nic')]"
+                    },
+                    "osDiskName": {
+                    "value": "[concat('osdisk', parameters('application'), parameters('environment'), parameters('project'), copyIndex())]"
+                    },
+                    "dataDiskName":{
+                    "value": "[concat('datadisk', parameters('application'), parameters('environment'), parameters('project'), copyIndex())]"
+                    },
+                    "rgLocation": {
+                    "value": "[parameters('rgLocation')]"
+                    },
+                    "publisher": {
+                        "value": "[parameters('publisher')]"
+                    },
+                    "offer": {
+                        "value": "[parameters('offer')]"
+                    }                      
+                }   
+            }
+        }
+    ],
+    "outputs": {}
+}

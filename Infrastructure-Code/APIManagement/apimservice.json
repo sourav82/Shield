@@ -1,0 +1,136 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the service"
+            }            
+        },
+        "location": {
+            "type": "string",
+            "metadata": {
+                "description": "Location of this deployment"
+            }            
+        },
+        "adminEmail": {
+            "type": "string",
+            "metadata": {
+                "description": "Administrator email id"
+            }            
+        },
+        "orgName": {
+            "type": "string",
+            "metadata": {
+                "description": "Organization name"
+            }            
+        },
+        "tier": {
+            "type": "string",
+            "metadata": {
+                "description": "Tier of deployment"
+            }            
+        },
+        "capacity": {
+            "type": "int",
+            "metadata": {
+                "description": "Capacity of the tier sku"
+            }            
+        },
+        "loggerName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the logger"
+            }            
+        },
+        "appInsightsId": {
+            "type": "string",
+            "metadata": {
+                "description": "ID of appinsight resource"
+            }
+        },
+        "environment": {
+            "type": "string",
+            "metadata": {
+                "description": "Environment for this deployment"
+            }
+        },
+        "project": {
+            "type": "string",
+            "metadata": {
+                "description": "Project name for this deployment"
+            }
+        },
+        "subnetId": {
+            "type": "string",
+            "metadata": {
+                "description": "ID of the subnet"
+            }
+        },
+        "virtualNetworkType": {
+            "type": "string",
+            "metadata": {
+                "description": "Type of virtual network"
+            }
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2019-01-01",
+            "name": "[parameters('name')]",
+            "location": "[parameters('location')]",
+            "type": "Microsoft.ApiManagement/service",
+            "tags": {
+                "Environment-Type": "[parameters('environment')]",
+                "project": "[parameters('project')]"
+            },
+            "sku": {
+                "name": "[parameters('tier')]",
+                "capacity": "[parameters('capacity')]"
+            },
+            "properties": {
+                "publisherEmail": "[parameters('adminEmail')]",
+                "publisherName": "[parameters('orgName')]",
+                "virtualNetworkConfiguration": {
+                    "subnetResourceId": "[parameters('subnetId')]"
+                },
+                "virtualNetworkType": "[parameters('virtualNetworkType')]"
+            },
+            "resources": [
+                {
+                    "apiVersion": "2019-01-01",
+                    "type": "loggers",
+                    "name": "[parameters('loggerName')]",
+                    "dependsOn": [
+                        "[concat('Microsoft.ApiManagement/service/', parameters('name'))]"
+                    ],
+                    "properties": {
+                        "loggerType": "applicationInsights",
+                        "resourceId": "[parameters('appInsightsId')]",
+                        "credentials": {
+                            "instrumentationKey": "[reference(parameters('appInsightsId'), '2015-05-01').InstrumentationKey]"
+                        }
+                    }
+                },
+                {
+                    "apiVersion": "2019-01-01",
+                    "type": "diagnostics",
+                    "name": "applicationinsights",
+                    "dependsOn": [
+                        "[concat('Microsoft.ApiManagement/service/', parameters('name'))]",
+                        "[concat('Microsoft.ApiManagement/service/', parameters('name'), '/loggers/', parameters('loggerName'))]"
+                    ],
+                    "properties": {
+                        "loggerId": "[concat(resourceGroup().id, '/providers/Microsoft.ApiManagement/service/', parameters('name'), '/loggers/', parameters('loggerName'))]",
+                        "alwaysLog": "allErrors",
+                        "sampling": {
+                            "percentage": 100,
+                            "samplingType": "fixed"
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "bastionSubnet": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "bastionHostName": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "rgLocation": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "environment": {
+            "value": ""
+        },
+        "project": {
+            "value": ""
+        }
+    }
+}

@@ -1,0 +1,39 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "adminUsername": {
+            "value": "superuser"
+        },
+        "adminPassword": {
+            "value": "II" // TODO: Fill in parameter value
+        },
+        "windowsOSVersion": {
+            "value": "2019-Datacenter"
+        },
+        "vmSize": {
+            "value": "Standard_DS1_v2"
+        },
+        "vmName": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "nicName": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "osDiskName": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "dataDiskname": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "rgLocation": {
+            "value": "uksouth" // TODO: Fill in parameter value
+        },
+        "publisher": {
+            "value": ""
+        },
+        "offer": {
+            "value": ""
+        }        
+    }
+}

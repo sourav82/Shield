@@ -1,0 +1,162 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"environment": {
+		   "type": "string",
+		   "metadata": {
+				"description": "Environment for the deploymen"
+			}
+		},
+		"project": {
+		   "type": "string",
+		   "metadata": {
+				"description": "Project name for deployment"
+			}
+		},
+		"adminUsername": {
+			"type": "string",
+			"metadata": {
+				"description": "Username for the Virtual Machine."
+			}
+		},
+		"adminPassword": {
+			"type": "string",
+			"metadata": {
+				"description": "Password for the Virtual Machine."
+			}
+		},
+		"publisher": {
+			"type": "string",
+			"metadata": {
+				"description": "Publisher of VM image"
+			}
+		},
+		"offer": {
+			"type": "string",
+			"metadata": {
+				"description": "VM offering"
+			}
+		},
+		"windowsOSVersion": {
+			"type": "string",
+			"defaultValue": "2019-Datacenter",
+			"metadata": {
+				"description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version."
+			}
+		},
+		"vmSize": {
+			"type": "string",
+			"defaultValue": "Standard_D2_v3",
+			"metadata": {
+				"description": "Size of the virtual machine."
+			}
+		},
+		"vmName": {
+			"type": "string",
+			"metadata": {
+				"description": "Name of the virtual machine"
+			}
+		},
+        "nicName": {
+           "type": "string",
+           "metadata": {
+                "description": "Name of the nic"
+            }
+        },
+        "osDiskName": {
+           "type": "string",
+           "metadata": {
+                "description": "Name of the OS disk"
+            }
+        },
+        "dataDiskname": {
+           "type": "string",
+           "metadata": {
+                "description": "Name of the data disk"
+            }
+        },
+		"rgLocation": {
+			"type": "string",
+			"metadata": {
+				"description": "Location for all resources."
+			}
+		}
+	},
+	"variables": {
+		//"storageAccountName": "[concat('stgii', parameters('application'), parameters('environment'), parameters('project'), '1')]",
+		//"nicName": "[concat('nicii', uniquestring(resourceGroup().id))]"
+	},
+	"resources": [//{
+	// 		"type": "Microsoft.Storage/storageAccounts",
+	// 		"apiVersion": "2018-11-01",
+	// 		"name": "[variables('storageAccountName')]",
+	// 		"location": "[parameters('rgLocation')]",
+	// 		"sku": {
+	// 			"name": "Standard_LRS"
+	// 		},
+	// 		"kind": "Storage",
+	// 		"properties": {}
+	// 	},
+		{
+			"type": "Microsoft.Compute/virtualMachines",
+			"apiVersion": "2019-07-01",
+			"name": "[parameters('vmName')]",
+			"location": "[parameters('rgLocation')]",
+			"dependsOn": [
+				//"[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+				//"[resourceId('Microsoft.Network/networkInterfaces', parameters('nicName'))]"
+			],
+			"tags": {
+				"Environment-Type": "[parameters('environment')]",
+				"project": "[parameters('project')]"
+			},
+			"properties": {
+				"hardwareProfile": {
+					"vmSize": "[parameters('vmSize')]"
+				},
+				"osProfile": {
+					"computerName": "[parameters('vmName')]",
+					"adminUsername": "[parameters('adminUsername')]",
+					"adminPassword": "[parameters('adminPassword')]"
+				},
+				"storageProfile": {
+					"imageReference": {
+						"publisher": "[parameters('publisher')]",
+						"offer": "[parameters('offer')]",
+						"sku": "[parameters('windowsOSVersion')]",
+						"version": "latest"
+					},
+					"osDisk": {
+						"name": "[parameters('osdiskName')]",
+						"createOption": "FromImage"
+					},
+					"dataDisks": [{
+						"name": "[parameters('dataDiskName')]",
+						"diskSizeGB": 1023,
+						"lun": 0,
+						"createOption": "Empty"
+					}]
+				},
+				"networkProfile": {
+					"networkInterfaces": [{
+						"id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('nicName'))]"
+					}]
+				},
+				"diagnosticsProfile": {
+					"bootDiagnostics": {
+						"enabled": false
+						//"storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))).primaryEndpoints.blob]"
+                        //"storageUri": "[concat('https://',variables('storageAccountName'),'.blob.core.windows.net')]"
+					}
+				}
+			},
+			"plan": {
+				"name": "[parameters('windowsOSVersion')]",
+				"publisher": "[parameters('publisher')]",
+				"product": "[parameters('offer')]"
+			}
+		}
+	],
+	"outputs": {}
+}

@@ -1,0 +1,48 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "rgName": {
+         "type": "string",
+         "metadata": {
+              "description": "Resoure group name"
+          }
+      },"rgLocation": {
+         "type": "string",
+         "metadata": {
+              "description": "description"
+          }
+      },
+      "environment": {
+        "type": "string",
+        "metadata": {
+          "description": "Environment of the deployment"
+        }
+      },
+      "project": {
+        "type": "string",
+        "metadata": {
+          "description": "descripProject name for this deployment"
+        }
+      }
+    },
+    "variables": {
+        
+    },
+    "resources": [
+      {
+        "type": "Microsoft.Resources/resourceGroups",
+        "apiVersion": "2018-05-01",
+        "name": "[parameters('rgName')]",
+        "location": "[parameters('rgLocation')]",
+        "tags": {
+          "Environment-Type": "[parameters('environment')]",
+          "project": "[parameters('project')]"
+        },
+        "properties": {}
+      }
+    ],
+    "outputs": {
+
+    }
+}

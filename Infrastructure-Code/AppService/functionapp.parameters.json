@@ -1,0 +1,36 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appName": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "rgLocation": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "appServicePlanName": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "subnetResourceId": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "environment": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "project": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "webappKind": {
+            "value": "functionapp,linux" // TODO: Fill in parameter value
+        },
+        "numberOfFuncs": {
+            "value": 1 // TODO: Fill in parameter value
+        },
+        "funcStorageName": {
+            "value": ""
+        },
+        "insightName": {
+            "value": ""
+        }
+    }
+}

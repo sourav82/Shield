@@ -1,0 +1,63 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "rgLocation": {
+           "type": "string",
+           "metadata": {
+                "description": "Location of the nic"
+            }
+        },
+        "subnetRef": {
+           "type": "string",
+           "metadata": {
+                "description": "Reference to the subnet for this nic"
+            }
+        },
+        "nicName": {
+           "type": "string",
+           "metadata": {
+                "description": "Name of the nic"
+            }
+        },
+        "environment": {
+           "type": "string",
+           "metadata": {
+                "description": "Environment for the deployment"
+            }
+        },
+        "project": {
+           "type": "string",
+           "metadata": {
+                "description": "Project for the deployment"
+            }
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+			"type": "Microsoft.Network/networkInterfaces",
+			"apiVersion": "2019-07-01",
+			"location": "[parameters('rgLocation')]",
+            "name": "[parameters('nicName')]",
+            "tags": {
+                "Environment-Type": "[parameters('environment')]",
+                "project": "[parameters('project')]"
+            },
+			"properties": {
+				"ipConfigurations": [{
+					"name": "[concat('ipconfigii001')]",
+					"properties": {
+                        "privateIpAddressVersion": "IPv4",
+						"privateIPAllocationMethod": "Dynamic",
+						"subnet": {
+							"id": "[parameters('subnetRef')]"
+						}
+					}
+				}]
+			}
+		}
+    ],
+    "outputs": {}
+}

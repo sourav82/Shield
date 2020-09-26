@@ -1,0 +1,42 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "location": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "adminEmail": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "orgName": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "tier": {
+            "value": "Developer" // TODO: Fill in parameter value
+        },
+        "capacity": {
+            "value": 1 // TODO: Fill in parameter value
+        },
+        "loggerName": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "appInsightsId": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "environment": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "project": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "virtualNetworkType": {
+            "value": "External"
+        },
+        "subnetId": {
+            "value": ""
+        }
+    }
+}

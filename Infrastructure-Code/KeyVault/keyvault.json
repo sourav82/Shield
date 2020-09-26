@@ -1,0 +1,156 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "rgLocation": {
+           "type": "string",
+           "metadata": {
+                "description": "Location of the key vault"
+            }
+        },
+        "environment": {
+           "type": "string",
+           "metadata": {
+                "description": "Environment for which the key vault is being created"
+            }
+        },
+        "project": {
+           "type": "string",
+           "metadata": {
+                "description": "Workstream for which this is being deployed"
+            }
+        },
+        "keyVauleSkuName": {
+           "type": "string",
+           "metadata": {
+                "description": "Sku name for the key vault"
+            },
+            "allowedValues": [
+                "Standard",
+                "Premium"
+            ]
+        },
+        "keyVaultAccessPolicyObjId": {
+           "type": "string",
+           "metadata": {
+                "description": "Object Id for key vault access policy"
+            }
+        },
+        "sqlPasswordSecretName": {
+           "type": "string",
+           "metadata": {
+                "description": "Sql password secret name in key vault"
+            }
+        },
+        "kvName": {
+           "type": "string",
+           "metadata": {
+                "description": "Name of the key vault"
+            }
+        },
+        "enableSoftDelete": {
+            "type": "bool",
+            "metadata": {
+                "description": "Enable soft delete"
+            }
+        }
+    },
+    "functions": [],
+    "variables": {
+        
+    },
+    "resources": [
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2016-10-01",
+            "name": "[parameters('kvName')]" ,
+            "location": "[parameters('rgLocation')]",
+            "tags": {
+                "Environment-Type": "[parameters('environment')]",
+                "Project": "[parameters('project')]"
+            },
+            "properties": {
+                "tenantId": "[subscription().tenantId]",
+                "sku": {
+                    "family": "A",
+                    "name": "[parameters('keyVauleSkuName')]"
+                },
+                "accessPolicies": [
+                    {
+                        "tenantId": "[subscription().tenantId]",
+                        "objectId": "[parameters('keyVaultAccessPolicyObjId')]",
+                        "permissions": {
+                            "keys": [
+                                "Get",
+                                "List",
+                                "Update",
+                                "Create",
+                                "Import",
+                                "Delete",
+                                "Recover",
+                                "Backup",
+                                "Restore"
+                            ],
+                            "secrets": [
+                                "Get",
+                                "List",
+                                "Set",
+                                "Delete",
+                                "Recover",
+                                "Backup",
+                                "Restore"
+                            ],
+                            "certificates": [
+                                "Get",
+                                "List",
+                                "Update",
+                                "Create",
+                                "Import",
+                                "Delete",
+                                "Recover",
+                                "Backup",
+                                "Restore",
+                                "ManageContacts",
+                                "ManageIssuers",
+                                "GetIssuers",
+                                "ListIssuers",
+                                "SetIssuers",
+                                "DeleteIssuers"
+                            ]
+                        }
+                    }
+                ],
+                "enabledForDeployment": true,
+                "enabledForDiskEncryption": true,
+                "enabledForTemplateDeployment": true,
+                "enableSoftDelete": "[parameters('enableSoftDelete')]",
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "defaultAction": "Allow"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "name": "[concat(parameters('kvName'), '/', parameters('sqlPasswordSecretName'))]",
+            "apiVersion": "2016-10-01",
+            "location": "[parameters('rgLocation')]",
+            "dependsOn": [
+            "[resourceId('Microsoft.KeyVault/vaults', parameters('kvName'))]"
+            ],
+            "properties": {
+                "value": "[concat('IIPrograme@kvsecret',parameters('environment'),parameters('project'),uniqueString(resourceGroup().id))]"
+            }
+        }
+    ],
+    "outputs": {
+        "rkkeyvault": {
+            "value": "[resourceId('Microsoft.KeyVault/vaults', parameters('kvName'))]",
+            "type": "string"
+        },
+        "sqlPassword": {
+            "type": "string",
+            "value": "[concat('IIPrograme@kvsecret',parameters('environment'),parameters('project'),uniqueString(resourceGroup().id))]"
+        }
+    }
+}

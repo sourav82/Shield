@@ -1,0 +1,85 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "bastionSubnet": {
+            "type": "string",
+            "metadata": {
+                "description": "Bastion subnet reference"
+            }
+        },
+        "bastionHostName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of Azure Bastion resource"
+            }
+        },
+        "rgLocation": {
+            "type": "string",
+            "metadata": {
+                "description": "Azure region for Bastion and virtual network"
+            }
+        },
+        "environment": {
+           "type": "string",
+           "metadata": {
+                "description": "Environment for the deployment"
+            }
+        },
+        "project": {
+           "type": "string",
+           "metadata": {
+                "description": "Project for this deployment"
+            }
+        }
+    },
+    "variables": {
+        "public-ip-address-name": "[concat(parameters('bastionHostName'),'-pip')]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2019-02-01",
+            "type": "Microsoft.Network/publicIpAddresses",
+            "name": "[variables('public-ip-address-name')]",
+            "location": "[parameters('rgLocation')]",
+            "tags":{
+                "Environment-Type": "[parameters('environment')]",
+                "project": "[parameters('project')]"
+            },
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Static"
+            }
+        },
+        {
+            "apiVersion": "2019-12-01",
+            "type": "Microsoft.Network/bastionHosts",
+            "name": "[parameters('bastionHostName')]",
+            "location": "[parameters('rgLocation')]",
+            "tags":{
+                "Environment-Type": "[parameters('environment')]",
+                "project": "[parameters('project')]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIpAddresses', variables('public-ip-address-name'))]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "IpConf",
+                        "properties": {
+                            "subnet": {
+                                "id": "[parameters('bastionSubnet')]"
+                            },
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIpAddresses', variables('public-ip-address-name'))]"
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

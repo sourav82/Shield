@@ -1,0 +1,163 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the app to create."
+            }
+        },
+        "rgLocation": {
+            "type": "string",
+            "metadata": {
+                "description": "The location in which all resources should be deployed."
+            }
+        },
+        "appServicePlanName": {
+           "type": "string",
+           "metadata": {
+                "description": "Reference to the app service plan"
+            }
+        },
+        "subnetResourceId": {
+           "type": "string",
+           "metadata": {
+                "description": "Reference to the empty subnet for vnet integration"
+            }
+        },
+        "environment": {
+           "type": "string",
+           "metadata": {
+                "description": "Environment of this deployment"
+            }
+        },
+        "project": {
+           "type": "string",
+           "metadata": {
+                "description": "Project name for this deployment"
+            }
+        },
+        "webappKind": {
+            "type": "string",
+            "allowedValues": [
+                "app",
+                "functionapp,linux"
+            ],
+            "metadata": {
+                "description": "Kind of web app"
+            }
+        },
+        "numberOfFuncs": {
+            "type": "int",
+            "metadata": {
+                "description": "Number of functions/applications to be created"
+            }
+        },
+        "insightName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of application insight"
+            }
+        }
+    },
+    "variables": {
+
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2018-11-01",
+            "name": "[concat(parameters('appName'), padLeft(add(copyIndex(), 1), 4, '0'))]",
+            "tags": {
+                "Environment-Type": "[parameters('environment')]",
+                "project": "[parameters('project')]"
+            },
+            "location": "[parameters('rgLocation')]",
+            "copy": {
+                "name": "sitecopy",
+                "count": "[parameters('numberOfFuncs')]"
+            },
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "dependsOn": [
+                // "[resourceId('Microsoft.Insights/components', parameters('insightName'), padLeft(add(copyIndex(), 1), 3, '0'))]"
+            ],
+            "kind": "[parameters('webappKind')]",
+            "properties": {
+                "enabled": true,
+                "httpsOnly": true,
+                "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', parameters('appServicePlanName'))]",
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "linuxFxVersion": "NODE|12",
+                    "appSettings": [
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(concat('microsoft.insights/components/', parameters('insightName'), padLeft(add(copyIndex(), 1), 4, '0')), '2015-05-01').InstrumentationKey]"
+                        },
+                        {
+                        "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
+                        "value": "~2"
+                        },
+                        {
+                        "name": "XDT_MicrosoftApplicationInsights_Mode",
+                        "value": "recommended"
+                        },
+                        {
+                        "name": "InstrumentationEngine_EXTENSION_VERSION",
+                        "value": "~1"
+                        },
+                        {
+                        "name": "DiagnosticServices_EXTENSION_VERSION",
+                        "value": "~3"
+                        },
+                        {
+                        "name": "APPINSIGHTS_PROFILERFEATURE_VERSION",
+                        "value": "1.0.0"
+                        },
+                        {
+                        "name": "XDT_MicrosoftApplicationInsights_BaseExtensions",
+                        "value": "~1"
+                        },                       
+                        {
+                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            "value": "[reference(concat('microsoft.insights/components/', parameters('insightName'), padLeft(add(copyIndex(), 1), 4, '0')), '2015-05-01').ConnectionString]"
+                        }
+                    ]
+                }
+            },
+            "resources": [
+                {
+                    "name": "virtualNetwork",
+                    "type": "networkConfig",
+                    "apiVersion": "2018-02-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites', concat(parameters('appName'), padLeft(add(copyIndex(), 1), 4, '0')))]"
+                    ],
+                    "properties": {
+                        "subnetResourceId": "[parameters('subnetResourceId')]", //"[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), variables('subnetName'))]",
+                        "swiftSupported": true
+                    }
+                }
+            ]
+        },
+        {
+            "apiVersion": "2015-05-01",
+            "name": "[concat(parameters('insightName'), padLeft(add(copyIndex(), 1), 4, '0'))]",
+            "type": "microsoft.insights/components",
+            "location": "uksouth",
+            "kind": "insights",
+            "tags": {},
+            "copy": {
+                "name": "sitecopy",
+                "count": "[parameters('numberOfFuncs')]"
+            },            
+            "properties": {
+                "ApplicationId": "[concat(parameters('appName'),padLeft(add(copyIndex(), 1), 4, '0'))]",
+                "Application_Type": "web"
+            }
+        }        
+    ]
+}
