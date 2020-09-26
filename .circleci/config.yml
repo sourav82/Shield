@@ -3,7 +3,7 @@ jobs:
     executor: azure-cli/azure-docker
     steps:
       - when:
-          condition: $BUILD_ENV
+          condition: << parameters.should-build >>
           steps:
             - azure-cli/login-with-service-principal
             - run:
@@ -18,4 +18,5 @@ workflows:
       - login-to-azure:
           context:
             - Shield
+          should-build: "$BUILD_ENV"
       
