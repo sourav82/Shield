@@ -12,7 +12,8 @@ jobs:
       - run: echo "<< parameters.should_build >>"
       - run: echo $BUILD_ENV
       - when:
-          condition: "<< parameters.should_build >>"
+          condition: 
+            equal: [ 1, << parameters.should_build >> ]
           steps:
             - when:
                 condition: 
