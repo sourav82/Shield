@@ -2,17 +2,33 @@ jobs:
   login-to-azure:
     executor: azure-cli/azure-docker
     parameters:
-      should_build:
+      env_build:
         type: string
         default: ""
+      should_build: string
+        type: string
+        default: ""        
     steps:
       - when:
-          condition: << parameters.should_build >>
+          condition: << parameters.should_build >>        
           steps:
-            - azure-cli/login-with-service-principal
-            - run:
-                command: az resource list
-                name: List resources of tenant stored as `AZURE_SP_TENANT` env var
+            - when:
+                condition: 
+                  equal: [ Dev, << parameters.should_build >> ]
+                steps:
+                  - azure-cli/login-with-service-principal
+                  - run:
+                      command: az resource list
+                      name: List resources of tenant stored as `AZURE_SP_TENANT` env var for Dev environment
+            - when:
+                condition:
+                  equal: [ SIT, << parameters.env_build >> ]          
+                steps:
+                  - azure-cli/login-with-service-principal
+                  - run:
+                      command: az resource list
+                      name: List resources of tenant stored as `AZURE_SP_TENANT` env var for SIT environment
+
 orbs:
   azure-cli: circleci/azure-cli@1.0.0
 version: 2.1
@@ -22,5 +38,6 @@ workflows:
       - login-to-azure:
           context:
             - Shield
-          should_build: "$BUILD_ENV"
+          should_build: "$NEW_ENV"  
+          env_build: "$BUILD_ENV"
       
