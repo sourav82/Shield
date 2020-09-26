@@ -1,6 +1,10 @@
 jobs:
   login-to-azure:
     executor: azure-cli/azure-docker
+    parameters:
+      should_build:
+        type: string
+        default: ""
     steps:
       - when:
           condition: << parameters.should_build >>
