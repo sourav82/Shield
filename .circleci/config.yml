@@ -6,13 +6,12 @@ jobs:
         type: string
         default: ""
       should_build:
-        type: string
+        type: boolean
     steps:
       - run: echo "<< parameters.should_build >>"
       - run: echo $BUILD_ENV
       - when:
-          condition: 
-            equal: [ 1, << parameters.should_build >> ]
+          condition: << parameters.should_build >>
           steps:
             - when:
                 condition: 
