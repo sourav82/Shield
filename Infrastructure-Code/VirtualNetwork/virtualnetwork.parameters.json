@@ -17,45 +17,6 @@
         "vnetAddressCIDR": {
             "value": "10.120.0.0/16"
         },
-        "storageprivateLinkSubnetName": {
-            "value": "storage-privlink-subnet"
-        },
-        "storageprivateLinkSubnetCIDR": {
-            "value": "10.120.0.0/24"
-        },
-        "sqlprivateLinkSubnetName": {
-            "value": "sql-privlink-subnet"
-        },
-        "sqlprivateLinkSubnetCIDR": {
-            "value": "10.120.2.0/24"
-        },    
-        "bastionSubnetCIDR": {
-            "value": "10.120.3.0/24"
-        },    
-        "vmSubnetName": {
-            "value": "vm-subnet"
-        },
-        "vmSubnetCIDR": {
-            "value": "10.120.1.0/24"
-        },
-        "databricksPublicSubnetCIDR": {
-            "value": "10.120.4.0/24"
-        },
-        "databricksPrivateSubnetCIDR": {
-            "value": "10.120.5.0/24"
-        },
-        "databricksPublicSubnetName": {
-            "value": "adb-public-subnet" // TODO: Fill in parameter value
-        },
-        "databricksPrivateSubnetName": {
-            "value": "adb-private-subnet" // TODO: Fill in parameter value
-        },
-        "applicationSubnetName":{
-            "value": "application-subnet"
-        },
-        "applicationSubnetCIDR": {
-            "value": "10.120.6.0/24"
-        },
         "functionappSubnetName":{
             "value": "function-subnet"
         },

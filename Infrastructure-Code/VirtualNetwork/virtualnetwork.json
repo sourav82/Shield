@@ -32,84 +32,6 @@
                 "description": "IP CIDR for the vnet"
             }
         },
-        "bastionSubnetCIDR": {
-           "type": "string",
-           "metadata": {
-                "description": "IP CIDR for the bastion vnet"
-            }
-        },
-        "storageprivateLinkSubnetName": {	
-            "type": "string",	
-            "metadata": {	
-                "description": "name of the subnet containing private link for storage"	
-            }	
-        },	
-        "storageprivateLinkSubnetCIDR": {	
-            "type": "string",	
-            "metadata": {	
-                    "description": "CIDR IP segment for private link subnet fir storage"	
-                }	
-        },	
-        "sqlprivateLinkSubnetName": {	
-        "type": "string",	
-        "metadata": {	
-                "description": "name of the subnet containing private link for database"	
-            }	
-        },	
-        "sqlprivateLinkSubnetCIDR": {	
-        "type": "string",	
-        "metadata": {	
-                "description": "CIDR IP segment for private link subnet for database"	
-            }	
-        },        
-        "vmSubnetName": {
-            "type": "string",
-            "metadata": {
-                "description": "Name of the subnet containing virtual machine for ADF self-hosted IR"
-            }
-        },
-        "vmSubnetCIDR": {
-           "type": "string",
-           "metadata": {
-                "description": "IP CIDR for the subnet containing virtual machine for ADF self-hosted IR"
-            }
-        },
-        "databricksPublicSubnetName": {
-           "type": "string",
-           "metadata": {
-                "description": "Name of public subnet for databricks"
-            }
-        },
-        "databricksPublicSubnetCIDR": {
-           "type": "string",
-           "metadata": {
-                "description": "IP CIDR for databricks public subnet"
-            }
-        },
-        "databricksPrivateSubnetName": {
-           "type": "string",
-           "metadata": {
-                "description": "Name of private subnet for databricks"
-            }
-        },
-        "databricksPrivateSubnetCIDR": {
-           "type": "string",
-           "metadata": {
-                "description": "IP CIDR for databricks private subnet"
-            }
-        },
-        "applicationSubnetName": {
-           "type": "string",
-           "metadata": {
-                "description": "Subnet name for application vnet integration"
-            }
-        },
-        "applicationSubnetCIDR": {
-           "type": "string",
-           "metadata": {
-                "description": "IP CIDR for the application subnet"
-            }
-        },
         "functionappSubnetName": {
             "type": "string",
             "metadata": {
@@ -136,8 +58,8 @@
         }
     },
     "variables": {
-        "networkSecurityGroupName": "[concat('nsgii', uniqueString(resourceGroup().id))]",
-        "adbNetworkSecurityGroupName": "databricksnsgii",
+        "networkSecurityGroupName": "[concat('nsgshield', uniqueString(resourceGroup().id))]",
+        "adbNetworkSecurityGroupName": "databricksnsgshield",
         "apimNetworkSecurityGroupName": "apimsubnetnsg"
     },
     "resources": [
@@ -194,97 +116,6 @@
                 "enableDdosProtection": false,
                 "enableVmProtection": true,
                 "subnets": [
-                    {
-                        "name": "[parameters('storageprivateLinkSubnetName')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('storageprivateLinkSubnetCIDR')]",
-                            "delegations": [],
-                            "privateEndpointNetworkPolicies": "Disabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
-                        }
-                    },
-                    {
-                        "name": "[parameters('sqlprivateLinkSubnetName')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('sqlprivateLinkSubnetCIDR')]",
-                            "delegations": [],
-                            "privateEndpointNetworkPolicies": "Disabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
-                        }
-                    },
-                    {
-                        "name": "[parameters('vmSubnetName')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('vmSubnetCIDR')]",
-                            "delegations": [],
-                            "privateEndpointNetworkPolicies": "Disabled",
-                            "privateLinkServiceNetworkPolicies": "Disabled",
-                            "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
-                            }
-                        }
-                    },
-                    {
-                        "name": "AzureBastionSubnet",
-                        "properties": {
-                            "addressPrefix": "[parameters('bastionSubnetCIDR')]",
-                            "delegations": [],
-                            "privateEndpointNetworkPolicies": "Disabled",
-                            "privateLinkServiceNetworkPolicies": "Disabled"
-                        }
-                    },
-                    {
-                        "name": "[parameters('databricksPublicSubnetName')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('databricksPublicSubnetCIDR')]",
-                            "delegations": [
-                                {
-                                    "name": "databricks-del-public",
-                                    "properties": {
-                                        "serviceName": "Microsoft.Databricks/workspaces"
-                                    }
-                                }
-                            ],
-                            "privateEndpointNetworkPolicies": "Disabled",
-                            "privateLinkServiceNetworkPolicies": "Disabled",
-                            "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('adbNetworkSecurityGroupName'))]"
-                            }   
-                        }
-                    } ,
-                    {
-                        "name": "[parameters('databricksPrivateSubnetName')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('databricksPrivateSubnetCIDR')]",
-                            "delegations": [
-                                {
-                                    "name": "databricks-del-private",
-                                    "properties": {
-                                        "serviceName": "Microsoft.Databricks/workspaces"
-                                    }
-                                }
-                            ],
-                            "privateEndpointNetworkPolicies": "Disabled",
-                            "privateLinkServiceNetworkPolicies": "Disabled",
-                            "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('adbNetworkSecurityGroupName'))]"
-                            }
-                        }
-                    },
-                    {
-                        "name": "[parameters('applicationSubnetName')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('applicationSubnetCIDR')]",
-                            "delegations": [
-                                {
-                                    "name": "appservice-del",
-                                    "properties": {
-                                        "serviceName": "Microsoft.Web/serverFarms"
-                                    }
-                                }
-                            ]
-                        }
-                    },
                     {
                         "name": "[parameters('functionappSubnetName')]",
                         "properties": {
