@@ -1,15 +1,15 @@
 jobs:
-  verify-install:
-    executor: azure-cli/default
+  login-to-azure:
+    executor: azure-cli/azure-docker
     steps:
-      - azure-cli/install
+      - azure-cli/login-with-service-principal
       - run:
-          command: az -v
-          name: Verify Azure CLI is installed
+          command: az resource list
+          name: List resources of tenant stored as `AZURE_SP_TENANT` env var
 orbs:
   azure-cli: circleci/azure-cli@1.0.0
 version: 2.1
 workflows:
   example-workflow:
     jobs:
-      - verify-install
+      - login-to-azure
