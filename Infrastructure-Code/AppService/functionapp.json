@@ -171,7 +171,7 @@
             "apiVersion": "2015-05-01",
             "name": "[concat(parameters('insightName'), padLeft(add(copyIndex(), 1), 4, '0'))]",
             "type": "microsoft.insights/components",
-            "location": "uksouth",
+            "location": "[parameters('rgLocation')]",
             "kind": "insights",
             "tags": {},
             "copy": {
