@@ -10,6 +10,7 @@ jobs:
           command: |
             subscription_id=SUBSCRIPTION_ID_${BUILD_ENV^^}
             resource_group=$RESOURCE_GROUP_NAME_${BUILD_ENV^^}
+            echo $resource_group
             eval "subscription_id=\${$subscription_id}"
             eval "resource_group=\${$resource_group}"
             echo $resource_group
