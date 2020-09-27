@@ -14,7 +14,7 @@ jobs:
             echo $resource_group
             eval "subscription_id=\${$subscription_id}"
             eval "resource_group=\${$resource_group}"
-            eval "vnet_name=\${$vnet-name}"
+            eval "vnet_name=\${$vnet_name}"
             echo $resource_group
             ls -l
             if $NEW_ENV; then
