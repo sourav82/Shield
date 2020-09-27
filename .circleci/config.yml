@@ -12,6 +12,7 @@ jobs:
             resource_group=$RESOURCE_GROUP_NAME_${BUILD_ENV^^}
             eval "subscription_id=\${$subscription_id}"
             eval "resource_group=\${$resource_group}"
+            echo $resource_group
             ls -l
             if $NEW_ENV; then
               if [ "$BUILD_ENV" = "Dev" ]; then
