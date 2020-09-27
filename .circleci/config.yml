@@ -8,7 +8,7 @@ jobs:
       - run:
           name: privision environment
           command: |
-            subscription_id = SUBSCRIPTION_ID_${BUILD_ENV^^}
+            subscription_id=SUBSCRIPTION_ID_${BUILD_ENV^^}
             ls -l
             if $NEW_ENV; then
               if [ "$BUILD_ENV" = "Dev" ]; then
