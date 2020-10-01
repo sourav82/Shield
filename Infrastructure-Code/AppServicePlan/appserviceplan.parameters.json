@@ -34,9 +34,6 @@
         },
         "workerSize": {
             "value": 3
-        },
-        "capacity": {
-            "value": "1"
         }
     }
 }

@@ -73,12 +73,6 @@
             "metadata": {
                 "description": "Hosting environment"
             }
-        },
-        "capacity": {
-            "type": "string",
-            "metadata": {
-                "description": "Instance count in manual auto-scale"
-            }
         }
     },
     "functions": [],
@@ -94,8 +88,7 @@
                 "project": "[parameters('project')]"
             },
             "sku": {
-                "name": "[parameters('appServicePlanSku')]",
-                "capacity": "[parameters('capacity')]"
+                "name": "[parameters('appServicePlanSku')]"
             },
             "kind": "[parameters('aspKind')]",
             "properties": {
