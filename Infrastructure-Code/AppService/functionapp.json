@@ -147,8 +147,7 @@
                             "value": "[concat(toLower(concat(parameters('appName'), padLeft(add(copyIndex(), 1), 4, '0'))), 'bf06')]"
                         }
 
-                    ],
-                    "linuxFxVersion": "Python|3.7"
+                    ]
                 },
                 "reserved": true
             },
