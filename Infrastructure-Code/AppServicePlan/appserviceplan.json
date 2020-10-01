@@ -44,19 +44,6 @@
                 "description": "Kind of app service plan"
             }
         },
-        "aspTier": {
-            "type": "string",
-            "allowedValues": [
-				"Shared",
-                "Standard",
-                "Dynamic",
-                "PremiumV2",
-                "ElasticPremium"
-            ],
-            "metadata": {
-                "description": "Tier of deployment"
-            }
-        },
         "isReserved": {
             "type": "bool",
             "metadata": {
@@ -107,7 +94,6 @@
                 "project": "[parameters('project')]"
             },
             "sku": {
-                "tier": "[parameters('aspTier')]",
                 "name": "[parameters('appServicePlanSku')]",
                 "capacity": "[parameters('capacity')]"
             },

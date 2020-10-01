@@ -20,9 +20,6 @@
         "aspKind": {
             "value": "linux"
         },
-        "aspTier": {
-            "value": "ElasticPremium" // TODO: Fill in parameter value
-        },
         "isReserved": {
             "value": false // TODO: Fill in parameter value
         },
