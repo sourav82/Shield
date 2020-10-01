@@ -47,6 +47,7 @@
         "aspTier": {
             "type": "string",
             "allowedValues": [
+				"Shared",
                 "Standard",
                 "Dynamic",
                 "PremiumV2",
