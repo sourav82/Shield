@@ -17,9 +17,6 @@
         "keyVaultAccessPolicyObjId": {
             "value": "" // TODO: Fill in parameter value
         },
-        "sqlPasswordSecretName": {
-            "value": "" // TODO: Fill in parameter value
-        },
         "kvName": {
             "value": "" // TODO: Fill in parameter value
         },
