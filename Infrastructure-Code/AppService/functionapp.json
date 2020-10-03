@@ -20,12 +20,6 @@
                 "description": "Reference to the app service plan"
             }
         },
-        "subnetResourceId": {
-           "type": "string",
-           "metadata": {
-                "description": "Reference to the empty subnet for vnet integration"
-            }
-        },
         "environment": {
            "type": "string",
            "metadata": {
@@ -100,7 +94,7 @@
                         },
                         {
                             "name": "FUNCTIONS_WORKER_RUNTIME",
-                            "value": "python"
+                            "value": "dotnet"
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -149,22 +143,10 @@
 
                     ]
                 },
-                "reserved": true
+                "reserved": false
             },
             "resources": [
-                {
-                   "name": "virtualNetwork",
-                    "type": "networkConfig",
-                    "apiVersion": "2018-02-01",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Web/sites', concat(parameters('appName'), padLeft(add(copyIndex(), 1), 4, '0')))]"
-                    ],
-                    "properties": {
-                        "subnetResourceId": "[parameters('subnetResourceId')]", //"[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), variables('subnetName'))]",
-                        "swiftSupported": true
-                    }
-                                    
-                }
+
             ]        
         },
         {

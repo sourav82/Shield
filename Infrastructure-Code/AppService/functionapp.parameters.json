@@ -11,9 +11,6 @@
         "appServicePlanName": {
             "value": "" // TODO: Fill in parameter value
         },
-        "subnetResourceId": {
-            "value": "" // TODO: Fill in parameter value
-        },
         "environment": {
             "value": "" // TODO: Fill in parameter value
         },

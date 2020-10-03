@@ -36,12 +36,6 @@
                 "description": "Object Id for key vault access policy"
             }
         },
-        "sqlPasswordSecretName": {
-           "type": "string",
-           "metadata": {
-                "description": "Sql password secret name in key vault"
-            }
-        },
         "kvName": {
            "type": "string",
            "metadata": {
@@ -129,28 +123,12 @@
                     "defaultAction": "Allow"
                 }
             }
-        },
-        {
-            "type": "Microsoft.KeyVault/vaults/secrets",
-            "name": "[concat(parameters('kvName'), '/', parameters('sqlPasswordSecretName'))]",
-            "apiVersion": "2016-10-01",
-            "location": "[parameters('rgLocation')]",
-            "dependsOn": [
-            "[resourceId('Microsoft.KeyVault/vaults', parameters('kvName'))]"
-            ],
-            "properties": {
-                "value": "[concat('IIPrograme@kvsecret',parameters('environment'),parameters('project'),uniqueString(resourceGroup().id))]"
-            }
         }
     ],
     "outputs": {
         "rkkeyvault": {
             "value": "[resourceId('Microsoft.KeyVault/vaults', parameters('kvName'))]",
             "type": "string"
-        },
-        "sqlPassword": {
-            "type": "string",
-            "value": "[concat('IIPrograme@kvsecret',parameters('environment'),parameters('project'),uniqueString(resourceGroup().id))]"
         }
     }
 }
